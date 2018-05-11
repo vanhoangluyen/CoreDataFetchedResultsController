@@ -163,7 +163,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="9Ke-Iz-kEs">
                             <connections>
-                                <segue destination="oyd-Sj-Khh" kind="unwind" unwindAction="unwindFromFor:" id="XlV-0R-d05"/>
+                                <action selector="saveCoreData:" destination="BYZ-38-t0r" id="zeK-op-iL7"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -174,7 +174,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <exit id="oyd-Sj-Khh" userLabel="Exit" sceneMemberID="exit"/>
                 <tapGestureRecognizer id="gHl-8k-2lO">
                     <connections>
                         <action selector="selectImageFromPhotoLibrary:" destination="BYZ-38-t0r" id="tfk-0H-kMS"/>

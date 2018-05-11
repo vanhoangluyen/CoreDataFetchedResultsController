@@ -89,10 +89,6 @@ class MasterTableViewController: UITableViewController,NSFetchedResultsControlle
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let detaiViewController = segue.destination as? DetailViewController else { return }
         guard let index = tableView.indexPathForSelectedRow else { return }
-        let object = fetchedResultsController.object(at: index)
-        detaiViewController.detailObject = object
-    }
-    @IBAction func unwindFrom(for unwindSegue: UIStoryboardSegue) {
-    
+        detaiViewController.index = index
     }
 }

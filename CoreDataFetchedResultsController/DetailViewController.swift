@@ -15,6 +15,8 @@ class DetailViewController: UIViewController,UITextFieldDelegate, UIImagePickerC
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var ageTextField: UITextField!
     
+    var index: IndexPath?
+    var fetchedResultsController = DataService.shared.fetchedResultsController
     var detailObject: Entity?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,10 +24,11 @@ class DetailViewController: UIViewController,UITextFieldDelegate, UIImagePickerC
         configure()
     }
     func configure() {
-        if let object = detailObject {
-            nameTextField.text = object.name
-            ageTextField.text = String(object.age)
-            photoImageView.image = object.photoImage as? UIImage
+        if let indexPath = index {
+            let entity = fetchedResultsController.object(at: indexPath)
+            nameTextField.text = entity.name
+            ageTextField.text = String(entity.age)
+            photoImageView.image = entity.photoImage as? UIImage
         }
     }
     override func didReceiveMemoryWarning() {
@@ -60,19 +63,24 @@ class DetailViewController: UIViewController,UITextFieldDelegate, UIImagePickerC
         navigationController?.popToRootViewController(animated: true)
     }
     // MARK: Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        var age : Int?
-        guard let masterTableView = segue.destination as? MasterTableViewController else { return  }
+    @IBAction func saveCoreData(_ sender: UIBarButtonItem) {
+        var ageValue: Int?
         if ageTextField.text != "" {
-            age = Int(ageTextField.text!)
+            ageValue = Int(ageTextField.text!)
         }
-        let contex = masterTableView.fetchedResultsController.managedObjectContext
-        if masterTableView.tableView.indexPathForSelectedRow == nil {
-            detailObject = Entity(context: contex)
+        if let indexPath = index {
+            let entity = fetchedResultsController.object(at: indexPath)
+            entity.name = nameTextField.text
+            entity.age = Int64(ageValue!)
+            entity.photoImage = photoImageView.image
+        } else {
+            let context = fetchedResultsController.managedObjectContext
+            let entity = Entity(context: context)
+            entity.name = nameTextField.text
+            entity.age = Int64(ageValue!)
+            entity.photoImage = photoImageView.image
         }
-        detailObject?.age = Int64(age!)
-        detailObject?.name = nameTextField.text
-        detailObject?.photoImage = photoImageView.image
         DataService.shared.saveToCoreData()
+        navigationController?.popViewController(animated: true)
     }
 }
